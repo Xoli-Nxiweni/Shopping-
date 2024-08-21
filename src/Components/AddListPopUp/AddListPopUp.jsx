@@ -98,22 +98,330 @@
 
 // export default AddListPopup;
 
-import './AddListPopup.css';
+// import './AddListPopup.css';
+// import CancelOutlinedIcon from '@mui/icons-material/CancelOutlined';
 
-// eslint-disable-next-line react/prop-types
-const AddListPopup = ({ onClose }) => {
+// // eslint-disable-next-line react/prop-types
+// const AddListPopup = ({ onClose }) => {
+//   return (
+//     <div className="popupOverlay">
+//       <div className="popupContent">
+//         <h2>Add New List</h2>
+//         <form>
+//           <input type="text" placeholder="List Name" />
+//           <input type="text" placeholder="Item 1" />
+//           <input type="text" placeholder="Item 2" />
+//           <input type="number" placeholder="Quantity" />
+//           <input type="dropdown" placeholder="Category" />
+//           {/* Add more fields as needed */}
+//           <button type="submit">Add List</button>
+//         <button onClick={onClose} className="closeButton"><CancelOutlinedIcon/></button>
+//         </form>
+//       </div>
+//     </div>
+//   );
+// };
+
+// export default AddListPopup;
+
+// import { useState } from 'react';
+// import './AddListPopup.css';
+// import CancelOutlinedIcon from '@mui/icons-material/CancelOutlined';
+
+// const AddListPopup = ({ onClose, onSubmit, list }) => {
+//   const [name, setName] = useState(list ? list.name : '');
+//   const [items, setItems] = useState(list ? list.items : [{ name: '', quantity: '' }]);
+//   const [category, setCategory] = useState(list ? list.category : '');
+
+//   const handleItemChange = (index, field, value) => {
+//     const newItems = [...items];
+//     newItems[index][field] = value;
+//     setItems(newItems);
+//   };
+
+//   const handleAddItem = () => {
+//     setItems([...items, { name: '', quantity: '' }]);
+//   };
+
+//   const handleSubmit = (event) => {
+//     event.preventDefault();
+//     const updatedList = {
+//       id: list ? list.id : Date.now(), // Use timestamp for new lists
+//       name,
+//       items,
+//       category,
+//     };
+//     onSubmit(updatedList);
+//   };
+
+//   return (
+//     <div className="popupOverlay">
+//       <div className="popupContent">
+//         <h2>{list ? 'Edit List' : 'Add New List'}</h2>
+//         <form onSubmit={handleSubmit}>
+//           <div>
+//             <label>List Name:</label>
+//             <input
+//               type="text"
+//               value={name}
+//               onChange={(e) => setName(e.target.value)}
+//               placeholder="List Name"
+//               required
+//             />
+//           </div>
+//           {items.map((item, index) => (
+//             <div key={index} className="itemFields">
+//               <input
+//                 type="text"
+//                 value={item.name}
+//                 onChange={(e) => handleItemChange(index, 'name', e.target.value)}
+//                 placeholder={`Item ${index + 1} Name`}
+//                 required
+//               />
+//               <input
+//                 type="number"
+//                 value={item.quantity}
+//                 onChange={(e) => handleItemChange(index, 'quantity', e.target.value)}
+//                 placeholder="Quantity"
+//                 required
+//               />
+//             </div>
+//           ))}
+//           <button type="button" onClick={handleAddItem}>
+//             Add Item
+//           </button>
+//           <div>
+//             <label>Category:</label>
+//             <select value={category} onChange={(e) => setCategory(e.target.value)}>
+//               <option value="">Select Category</option>
+//               <option value="Groceries">Groceries</option>
+//               <option value="Household">Household</option>
+//               <option value="Electronics">Electronics</option>
+//               {/* Add more categories as needed */}
+//             </select>
+//           </div>
+//           <button type="submit">Save List</button>
+//           <button type="button" onClick={onClose} className="closeButton">
+//             <CancelOutlinedIcon />
+//           </button>
+//         </form>
+//       </div>
+//     </div>
+//   );
+// };
+
+// export default AddListPopup;
+
+// import { useState, useEffect } from 'react';
+// import './AddListPopup.css';
+// import CancelOutlinedIcon from '@mui/icons-material/CancelOutlined';
+
+// const AddListPopup = ({ onClose, onSubmit, list }) => {
+//   const [name, setName] = useState('');
+//   const [items, setItems] = useState([{ name: '', quantity: '' }]);
+//   const [category, setCategory] = useState('');
+
+//   // Initialize state when list prop changes
+//   useEffect(() => {
+//     if (list) {
+//       // eslint-disable-next-line react/prop-types
+//       setName(list.name || '');
+//       // eslint-disable-next-line react/prop-types
+//       setItems(list.items || [{ name: '', quantity: '' }]);
+//       // eslint-disable-next-line react/prop-types
+//       setCategory(list.category || '');
+//     }
+//   }, [list]);
+
+//   const handleItemChange = (index, field, value) => {
+//     const newItems = [...items];
+//     newItems[index][field] = value;
+//     setItems(newItems);
+//   };
+
+//   const handleAddItem = () => {
+//     setItems([...items, { name: '', quantity: '' }]);
+//   };
+
+//   const handleSubmit = (event) => {
+//     event.preventDefault();
+//     if (!name) {
+//       // Handle validation
+//       alert('List name is required');
+//       return;
+//     }
+//     const updatedList = {
+//       // eslint-disable-next-line react/prop-types
+//       id: list ? list.id : Date.now().toString(), // Convert timestamp to string
+//       name,
+//       items,
+//       category,
+//     };
+//     onSubmit(updatedList);
+//   };
+
+//   return (
+//     <div className="popupOverlay">
+//       <div className="popupContent">
+//         <h2>{list ? 'Edit List' : 'Add New List'}</h2>
+//         <form onSubmit={handleSubmit}>
+//           <div>
+//             <label htmlFor="listName">List Name:</label>
+//             <input
+//               id="listName"
+//               type="text"
+//               value={name}
+//               onChange={(e) => setName(e.target.value)}
+//               placeholder="List Name"
+//               required
+//             />
+//           </div>
+//             <div key={index} className="itemFields">
+//               <input
+//                 type="text"
+//                 value={item.name}
+//                 onChange={(e) => handleItemChange(index, 'name', e.target.value)}
+//                 placeholder={`Item ${index + 1} Name`}
+//                 required
+//               />
+//               <input
+//                 type="number"
+//                 value={item.quantity}
+//                 onChange={(e) => handleItemChange(index, 'quantity', e.target.value)}
+//                 placeholder="Quantity"
+//                 required
+//               />
+//             </div>
+//           <button type="button" onClick={handleAddItem}>
+//             Add Item
+//           </button>
+//           <div>
+//             <label htmlFor="category">Category:</label>
+//             <select
+//               id="category"
+//               value={category}
+//               onChange={(e) => setCategory(e.target.value)}
+//             >
+//               <option value="">Select Category</option>
+//               <option value="Groceries">Groceries</option>
+//               <option value="Household">Household</option>
+//               <option value="Electronics">Electronics</option>
+//               {/* Add more categories as needed */}
+//             </select>
+//           </div>
+//           <button type="submit">Save List</button>
+//           <button type="button" onClick={onClose} className="closeButton">
+//             <CancelOutlinedIcon />
+//           </button>
+//         </form>
+//       </div>
+//     </div>
+//   );
+// };
+
+// export default AddListPopup;
+
+import { useState, useEffect } from 'react';
+import './AddListPopup.css';
+import CancelOutlinedIcon from '@mui/icons-material/CancelOutlined';
+
+const AddListPopup = ({ onClose, onSubmit, list }) => {
+  const [name, setName] = useState('');
+  const [items, setItems] = useState([{ name: '', quantity: '' }]);
+  const [category, setCategory] = useState('');
+
+  // Initialize state when list prop changes
+  useEffect(() => {
+    if (list) {
+      setName(list.name || '');
+      setItems(list.items || [{ name: '', quantity: '' }]);
+      setCategory(list.category || '');
+    }
+  }, [list]);
+
+  const handleItemChange = (index, field, value) => {
+    const newItems = [...items];
+    newItems[index][field] = value;
+    setItems(newItems);
+  };
+
+  const handleAddItem = () => {
+    setItems([...items, { name: '', quantity: '' }]);
+  };
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    if (!name) {
+      alert('List name is required');
+      return;
+    }
+    const updatedList = {
+      id: list ? list.id : Date.now().toString(),
+      name,
+      items,
+      category,
+    };
+    onSubmit(updatedList);
+  };
+
   return (
     <div className="popupOverlay">
       <div className="popupContent">
-        <h2>Add New List</h2>
-        <form>
-          <input type="text" placeholder="List Name" />
-          <input type="text" placeholder="Item 1" />
-          <input type="text" placeholder="Item 2" />
-          {/* Add more fields as needed */}
-          <button type="submit">Add List</button>
+        <h2>{list ? 'Edit List' : 'Add New List'}</h2>
+        <form onSubmit={handleSubmit}>
+          <div>
+            <label htmlFor="listName">List Name:</label>
+            <input
+              id="listName"
+              type="text"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              placeholder="List Name"
+              required
+            />
+          </div>
+          {/* Directly render the first item input fields */}
+          <div className="itemFields">
+            <input
+              type="text"
+              value={items[0]?.name || ''}
+              onChange={(e) => handleItemChange(0, 'name', e.target.value)}
+              placeholder="Item 1 Name"
+              required
+            />
+            <input
+              type="number"
+              value={items[0]?.quantity || ''}
+              onChange={(e) => handleItemChange(0, 'quantity', e.target.value)}
+              placeholder="Quantity"
+              required
+            />
+          </div>
+          {/* Repeat for additional items if needed */}
+          {/* For a fixed number of items, you can add similar blocks for items[1], items[2], etc. */}
+
+          <button type="button" onClick={handleAddItem}>
+            Add Item
+          </button>
+          <div>
+            <label htmlFor="category">Category:</label>
+            <select
+              id="category"
+              value={category}
+              onChange={(e) => setCategory(e.target.value)}
+            >
+              <option value="">Select Category</option>
+              <option value="Groceries">Groceries</option>
+              <option value="Household">Household</option>
+              <option value="Electronics">Electronics</option>
+              {/* Add more categories as needed */}
+            </select>
+          </div>
+          <button type="submit">Save List</button>
+          <button type="button" onClick={onClose} className="closeButton">
+            <CancelOutlinedIcon />
+          </button>
         </form>
-        <button onClick={onClose} className="closeButton">Close</button>
       </div>
     </div>
   );

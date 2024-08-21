@@ -76,7 +76,7 @@ function SearchAppBar({ onSearchChange }) {
       }} >
         <SearchIconWrapper  >
           <SearchIcon  sx={{
-            zIndex: 9
+            // zIndex: 1
           }}/>X
         </SearchIconWrapper  >
         <StyledInputBase
