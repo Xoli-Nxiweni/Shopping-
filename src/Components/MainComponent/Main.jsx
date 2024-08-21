@@ -93,14 +93,14 @@ const MainComponent = () => {
                 style={{ height: '100px', objectFit: 'contain' }}
               />
             </div>
-            <div className="text">
+            {/* <div className="text">
               <p>SHARE YOUR LIST</p>
               <p>
                 Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nihil mollitia saepe dolor ex velit amet
                 necessitatibus totam architecto unde laboriosam!
               </p>
               <button>SHARE INVITE LINK</button>
-            </div>
+            </div> */}
           </div>
         </div>
       </div>

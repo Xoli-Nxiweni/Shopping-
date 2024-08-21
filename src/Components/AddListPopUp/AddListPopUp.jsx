@@ -1,104 +1,85 @@
-import { useState } from 'react';
-
+import { useState, useEffect } from 'react';
+import { useDispatch } from 'react-redux';
+import { createList } from '../../slices/listsSlice'; // Adjust the import path
+import './AddListPopup.css';
 
 // eslint-disable-next-line react/prop-types
-function Auth({ onLogin }) {
-  const [isRegistering, setIsRegistering] = useState(false);
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
-  const [repeatPassword, setRepeatPassword] = useState('');
+const AddListPopup = ({ onClose }) => {
+  const dispatch = useDispatch();
+  const [listName, setListName] = useState('');
+  const [category, setCategory] = useState('');
+  const [categories, setCategories] = useState([]);
   const [error, setError] = useState('');
 
-  const handleLogin = async () => {
-    try {
-      const response = await fetch(`http://localhost:5000/users?username=${username}&password=${password}`);
-      const data = await response.json();
-
-      if (data.length > 0) {
-        onLogin(); // Login successful
-      } else {
-        setError('Invalid username or password');
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const response = await fetch('http://localhost:5000/categories');
+        if (!response.ok) throw new Error('Failed to fetch categories');
+        const data = await response.json();
+        setCategories(data);
+        if (data.length > 0) setCategory(data[0]); // Set default category
+      } catch (err) {
+        setError('Failed to load categories', err);
       }
-    } catch (err) {
-      setError('Failed to log in', err);
-    }
-  };
+    };
+    
+    fetchCategories();
+  }, []);
 
-  const handleRegister = async () => {
-    if (password !== repeatPassword) {
-      setError('Passwords do not match');
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (listName.trim() === '') {
+      setError('List name cannot be empty');
       return;
     }
 
+    const newList = { name: listName, category, items: [] };
+
     try {
-      // Check if the username already exists
-      const checkResponse = await fetch(`http://localhost:5000/users?username=${username}`);
-      const checkData = await checkResponse.json();
-
-      if (checkData.length > 0) {
-        setError('Username already exists');
-        return;
-      }
-
-      // Proceed with registration
-      const response = await fetch('http://localhost:5000/users', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ username, password }),
-      });
-
-      if (response.ok) {
-        onLogin(); // Registration successful, log in the user
-      } else {
-        setError('Failed to register');
-      }
+      await dispatch(createList(newList)).unwrap(); // Dispatch the createList action
+      onClose(); // Close the popup
     } catch (err) {
-      setError('Failed to register', err);
+      setError('Failed to add list', err);
     }
   };
 
   return (
-    <div className="auth-container">
-      <h2>{isRegistering ? 'Register' : 'Login'}</h2>
-      {error && <p className="auth-error">{error}</p>}
-      <div className="auth-form">
-        <div className="auth-field">
-          <label>Username</label>
-          <input 
-            type="text" 
-            value={username} 
-            onChange={(e) => setUsername(e.target.value)} 
-          />
-        </div>
-        <div className="auth-field">
-          <label>Password</label>
-          <input 
-            type="password" 
-            value={password} 
-            onChange={(e) => setPassword(e.target.value)} 
-          />
-        </div>
-        {isRegistering && (
-          <div className="auth-field">
-            <label>Repeat Password</label>
-            <input 
-              type="password" 
-              value={repeatPassword} 
-              onChange={(e) => setRepeatPassword(e.target.value)} 
+    <div className="popup-overlay">
+      <div className="popup-content">
+        <button className="close-btn" onClick={onClose}>✖</button>
+        <h2>Add New List</h2>
+        {error && <p className="error">{error}</p>}
+        <form onSubmit={handleSubmit}>
+          <div className="form-group">
+            <label htmlFor="listName">List Name</label>
+            <input
+              type="text"
+              id="listName"
+              value={listName}
+              onChange={(e) => setListName(e.target.value)}
+              placeholder="Enter list name"
             />
           </div>
-        )}
-        <button onClick={isRegistering ? handleRegister : handleLogin}>
-          {isRegistering ? 'Register' : 'Login'}
-        </button>
-        <button onClick={() => setIsRegistering(!isRegistering)}>
-          {isRegistering ? 'Switch to Login' : 'Switch to Register'}
-        </button>
+          <div className="form-group">
+            <label htmlFor="category">Category</label>
+            <select
+              id="category"
+              value={category}
+              onChange={(e) => setCategory(e.target.value)}
+            >
+              {categories.map((cat) => (
+                <option key={cat} value={cat}>
+                  {cat}
+                </option>
+              ))}
+            </select>
+          </div>
+          <button type="submit" className="submit-btn">Add List</button>
+        </form>
       </div>
     </div>
   );
-}
+};
 
-export default Auth;
+export default AddListPopup;

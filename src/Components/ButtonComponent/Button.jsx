@@ -8,7 +8,8 @@ const AddButton = ({ onAdd, onClear }) => {
     <div className='addButton'>
       <button className='Btn' onClick={onAdd}>
         <AddIcon /> ADD AN ITEM
-      </button>
+      </button><button>SHARE INVITE LINK</button>
+
       <button className='Btn2' onClick={onClear}>
         <ClearIcon /> CLEAR LIST
       </button>
