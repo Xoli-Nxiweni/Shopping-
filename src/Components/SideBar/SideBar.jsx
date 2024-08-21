@@ -98,7 +98,7 @@ const PersistentDrawerLeft = () => {
       <CssBaseline />
       <AppBar position="fixed" open={open} sx={{ background: 'transparent' }}>
         <Toolbar sx={{ 
-          background: '#173246',
+          background: '#000',
           display: 'flex',
           justifyContent: 'space-between',
           width: 'auto' 
@@ -128,7 +128,7 @@ const PersistentDrawerLeft = () => {
           '& .MuiDrawer-paper': {
             width: drawerWidth,
             boxSizing: 'border-box',
-            background: '#173246',
+            background: '#000',
             color: '#fff',
             textAlign:'center',
             display: 'flex',
@@ -152,9 +152,9 @@ const PersistentDrawerLeft = () => {
           {['Groceries', 'Office Supplies', 'Cleaning Products', 'Electronics'].map((category) => (
             <ListItem key={category} disablePadding>
               <ListItemButton onClick={() => handleCategoryClick(category)}>
-                <ListItemIcon>
-                  <InboxIcon />
-                </ListItemIcon>
+                {/* <ListItemIcon> */}
+                  {/* <InboxIcon /> */}
+                {/* </ListItemIcon> */}
                 <ListItemText primary={category} />
               </ListItemButton>
             </ListItem>
@@ -165,9 +165,9 @@ const PersistentDrawerLeft = () => {
           {['Books', 'Gardening Supplies', 'Pet Supplies', 'Health & Wellness'].map((category) => (
             <ListItem key={category} disablePadding>
               <ListItemButton onClick={() => handleCategoryClick(category)}>
-                <ListItemIcon>
-                  <MailIcon />
-                </ListItemIcon>
+                {/* <ListItemIcon> */}
+                  {/* <MailIcon /> */}
+                {/* </ListItemIcon> */}
                 <ListItemText primary={category} />
               </ListItemButton>
             </ListItem>
@@ -178,9 +178,9 @@ const PersistentDrawerLeft = () => {
           {['Fitness', 'Kitchen Gadgets', 'Toys', 'Office Furniture'].map((category) => (
             <ListItem key={category} disablePadding>
               <ListItemButton onClick={() => handleCategoryClick(category)}>
-                <ListItemIcon>
-                  <InboxIcon />
-                </ListItemIcon>
+                {/* <ListItemIcon> */}
+                  {/* <InboxIcon /> */}
+                {/* </ListItemIcon> */}
                 <ListItemText primary={category} />
               </ListItemButton>
             </ListItem>
@@ -191,9 +191,9 @@ const PersistentDrawerLeft = () => {
           {['Travel Essentials', 'Arts & Crafts', 'Seasonal Decor', 'Personal Care'].map((category) => (
             <ListItem key={category} disablePadding>
               <ListItemButton onClick={() => handleCategoryClick(category)}>
-                <ListItemIcon>
-                  <MailIcon />
-                </ListItemIcon>
+                {/* <ListItemIcon> */}
+                  {/* <MailIcon /> */}
+                {/* </ListItemIcon> */}
                 <ListItemText primary={category} />
               </ListItemButton>
             </ListItem>

@@ -97,9 +97,11 @@ function Auth({ onLogin }) {
       {error && <p className="auth-error">{error}</p>}
       <p className="toggle-auth">
         {isRegistering ? 'Already have an account?' : "Don't have an account?"}{' '}
+        <span className='authLinks'>
         <button onClick={() => setIsRegistering(!isRegistering)}>
           {isRegistering ? 'SIGN IN' : 'SIGN UP'}
         </button>
+        </span>
       </p>
     </div>
   );

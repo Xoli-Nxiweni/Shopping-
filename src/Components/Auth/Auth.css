@@ -57,7 +57,7 @@ button {
   padding: 12px 18px;
   border: none;
   border-radius: 6px;
-  background-color: #333333;
+  background-color: #000000;
   color: white;
   font-size: 16px;
   cursor: pointer;
@@ -81,7 +81,7 @@ button {
 
 .toggle-auth button {
   background-color: transparent;
-  color: #007bff;
+  /* color: #007bff; */
   padding: 0;
   border: none;
   cursor: pointer;
@@ -92,3 +92,9 @@ button {
   text-decoration: underline;
   color: #0056b3;
 } */
+
+.authLinks button{
+  color: purple;
+  text-decoration: underline;
+  letter-spacing: 1px;
+}

@@ -4,12 +4,11 @@ import Box from '@mui/material/Box';
 import InputBase from '@mui/material/InputBase';
 import SearchIcon from '@mui/icons-material/Search';
 import debounce from 'lodash.debounce';
-import { colors } from '@mui/material';
+// import { colors } from '@mui/material';
 
 // Styling components
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
-  
   borderRadius: theme.shape.borderRadius,
   backgroundColor: alpha(theme.palette.common.white, 0.15),
   '&:hover': {
@@ -19,7 +18,8 @@ const Search = styled('div')(({ theme }) => ({
   width: '100%',
   [theme.breakpoints.up('sm')]: {
     marginLeft: theme.spacing(0),
-    width: 'auto',
+    width: '20.65%',
+    // width: '30.5ch',
   },
 }));
 
@@ -28,7 +28,6 @@ const SearchIconWrapper = styled('div')(({ theme }) => ({
   height: '100%',
   position: 'absolute',
   cursor: 'pointer',
-  
   pointerEvents: 'none',
   display: 'flex',
   alignItems: 'center',
@@ -50,8 +49,7 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
       },
     },
     background: 'lightgrey',
-    borderRadius: '15px',
-    color:'green'
+    borderRadius: '5px',
   },
 }));
 
@@ -67,18 +65,21 @@ function SearchAppBar({ onSearchChange }) {
 
   useEffect(() => {
     debouncedSearch(searchTerm);
-    return () => debouncedSearch.cancel(); // Cleanup debounce on unmount
+    return () => debouncedSearch.cancel();
   }, [searchTerm, debouncedSearch]);
 
   return (
     <Box sx={{ flexGrow: 0,
     }}>
-      <Search >
+      <Search sx={{
+        padding: '0 10px'
+      }} >
         <SearchIconWrapper  >
-          <SearchIcon  />
+          <SearchIcon  sx={{
+            zIndex: 9
+          }}/>X
         </SearchIconWrapper  >
         <StyledInputBase
-          
           placeholder="Search…"
           inputProps={{ 'aria-label': 'search' }}
           onChange={(e) => setSearchTerm(e.target.value)}

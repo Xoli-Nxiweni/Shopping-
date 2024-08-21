@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchLists } from '../../slices/listsSlice';
+import { fetchLists, createList, updateList, deleteList } from '../../slices/listsSlice'; // Added actions
 import AddButton from '../ButtonComponent/Button';
 import SellOutlinedIcon from '@mui/icons-material/SellOutlined';
 import Loader from '../Loader/Loader';
@@ -15,6 +15,7 @@ const MainComponent = () => {
   const [showPopup, setShowPopup] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const [filteredLists, setFilteredLists] = useState([]);
+  const [editingList, setEditingList] = useState(null); // For editing list
 
   useEffect(() => {
     if (status === 'idle') {
@@ -37,12 +38,36 @@ const MainComponent = () => {
   }, [searchTerm, lists]);
 
   const handleAddList = () => {
+    setEditingList(null); // Clear editing state
+    setShowPopup(true);
+  };
+
+  const handleEditList = (list) => {
+    setEditingList(list);
     setShowPopup(true);
   };
 
   const handleClosePopup = () => {
     setShowPopup(false);
   };
+
+  const handleAddListSubmit = (list) => {
+    if (editingList) {
+      dispatch(updateList(list)); // Update existing list
+    } else {
+      dispatch(createList(list)); // Add new list
+    }
+    handleClosePopup();
+  };
+
+  const handleDeleteList = (id) => {
+    dispatch(deleteList(id)); // Delete list
+  };
+
+  // Add console logs for debugging
+  // console.log('Lists:', lists);
+  // console.log('Status:', status);
+  // console.log('Error:', error);
 
   return (
     <div className="Wrapper">
@@ -51,7 +76,7 @@ const MainComponent = () => {
       <div className="left">
         <AddButton label="Add New List" onClick={handleAddList} />
         <div className="searchContainer">
-        <SearchAppBar onSearchChange={setSearchTerm} />
+          <SearchAppBar onSearchChange={setSearchTerm} />
         </div>
         <div className="Container">
           {status === 'failed' && <p>Error: {error}</p>}
@@ -74,6 +99,14 @@ const MainComponent = () => {
                       <li>No items available</li>
                     )}
                   </ul>
+                  <button style={{
+                    background:'#0a0a0a',
+                    margin: '10px 10px 10px 0'
+                  }} onClick={() => handleEditList(list.id)}>Edit</button>
+                  <button style={{
+                    background:'#0a0a0a',
+                    margin: '10px 10px 10px 0'
+                  }} onClick={() => handleDeleteList(list.id)}>Delete</button>
                 </div>
               ))}
             </ul>
@@ -83,7 +116,7 @@ const MainComponent = () => {
         </div>
       </div>
 
-      <div className="right">
+      {/* <div className="right">
         <div className="shareContainer">
           <div className="textWrap">
             <div className="image">
@@ -93,19 +126,18 @@ const MainComponent = () => {
                 style={{ height: '100px', objectFit: 'contain' }}
               />
             </div>
-            {/* <div className="text">
-              <p>SHARE YOUR LIST</p>
-              <p>
-                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nihil mollitia saepe dolor ex velit amet
-                necessitatibus totam architecto unde laboriosam!
-              </p>
-              <button>SHARE INVITE LINK</button>
-            </div> */}
           </div>
         </div>
-      </div>
+      </div> */}
 
-      {showPopup && <AddListPopup onClose={handleClosePopup} />}
+      {showPopup && (
+        <div className="popup-overlay">
+          <div className="popup-content">
+            <button className="close-btn" onClick={handleClosePopup}>X</button>
+            <AddListPopup onClose={handleClosePopup} onSubmit={handleAddListSubmit} list={editingList} />
+          </div>
+        </div>
+      )}
     </div>
   );
 };
