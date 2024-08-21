@@ -64,7 +64,7 @@ function SearchAppBar({ onSearchChange }) {
   }, [searchTerm, debouncedSearch]);
 
   return (
-    <Box sx={{ flexGrow: 1 }}>
+    <Box sx={{ flexGrow: 0 }}>
       <Search>
         <SearchIconWrapper>
           <SearchIcon />

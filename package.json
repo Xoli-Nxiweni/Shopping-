@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
+    "start": "concurrently \"vite\" \"json-server --watch db.json --port 5000\"",
     "lint": "eslint .",
     "preview": "vite preview"
   },

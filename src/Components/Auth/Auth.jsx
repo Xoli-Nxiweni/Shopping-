@@ -1,15 +1,6 @@
 import { useState } from 'react';
+import axios from 'axios';
 import './Auth.css';
-
-// Helper functions to interact with local storage
-const loadUsers = () => {
-  const users = localStorage.getItem('users');
-  return users ? JSON.parse(users) : [];
-};
-
-const saveUsers = (users) => {
-  localStorage.setItem('users', JSON.stringify(users));
-};
 
 // eslint-disable-next-line react/prop-types
 function Auth({ onLogin }) {
@@ -19,38 +10,51 @@ function Auth({ onLogin }) {
   const [repeatPassword, setRepeatPassword] = useState(''); // State for repeat password
   const [error, setError] = useState('');
 
-  const handleLogin = () => {
-    const users = loadUsers();
-    const user = users.find(
-      (user) => user.username === username && user.password === password
-    );
+  const handleLogin = async () => {
+    try {
+      const response = await axios.get('http://localhost:5000/users', {
+        params: { username, password }
+      });
+      const user = response.data.find(
+        (user) => user.username === username && user.password === password
+      );
 
-    if (user) {
-      onLogin(); // Login successful
-    } else {
-      setError('Invalid username or password');
+      if (user) {
+        localStorage.setItem('user', JSON.stringify(user)); // Persist user in localStorage
+        onLogin(user);  // Pass the user object to the onLogin function
+      } else {
+        setError('Invalid username or password');
+      }
+    } catch (error) {
+      setError('An error occurred while logging in.', error);
     }
   };
 
-  const handleRegister = () => {
+  const handleRegister = async () => {
     if (password !== repeatPassword) {
       setError('Passwords do not match');
       return;
     }
 
-    const users = loadUsers();
-    const userExists = users.some((user) => user.username === username);
+    try {
+      const response = await axios.get('http://localhost:5000/users', {
+        params: { username }
+      });
+      const userExists = response.data.some((user) => user.username === username);
 
-    if (userExists) {
-      setError('Username already exists');
-      return;
+      if (userExists) {
+        setError('Username already exists');
+        return;
+      }
+
+      const newUser = { username, password, lists: [] };
+      await axios.post('http://localhost:5000/users', newUser);
+
+      localStorage.setItem('user', JSON.stringify(newUser)); // Persist newUser in localStorage
+      onLogin(newUser);  // Pass the newUser object to the onLogin function
+    } catch (error) {
+      setError('An error occurred while registering.', error);
     }
-
-    const newUser = { username, password, lists: [] };
-    users.push(newUser);
-    saveUsers(users);
-
-    onLogin(); // Automatically log in after registration
   };
 
   const handleSubmit = () => {
@@ -63,7 +67,7 @@ function Auth({ onLogin }) {
 
   return (
     <div className="auth-container">
-      <h2>{isRegistering ? 'Register' : 'Login'}</h2>
+      <h2>{isRegistering ? 'SIGN UP' : 'SIGN IN'}</h2>
       <input
         type="text"
         placeholder="Username"
@@ -88,13 +92,13 @@ function Auth({ onLogin }) {
         />
       )}
       <button onClick={handleSubmit}>
-        {isRegistering ? 'Register' : 'Login'}
+        {isRegistering ? 'SIGN UP' : 'SIGN IN'}
       </button>
       {error && <p className="auth-error">{error}</p>}
       <p className="toggle-auth">
         {isRegistering ? 'Already have an account?' : "Don't have an account?"}{' '}
         <button onClick={() => setIsRegistering(!isRegistering)}>
-          {isRegistering ? 'Login' : 'Register'}
+          {isRegistering ? 'SIGN IN' : 'SIGN UP'}
         </button>
       </p>
     </div>
@@ -102,3 +106,4 @@ function Auth({ onLogin }) {
 }
 
 export default Auth;
+
