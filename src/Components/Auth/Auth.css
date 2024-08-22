@@ -54,7 +54,7 @@
 }
 
 button {
-  padding: 12px 18px;
+  padding: 10px;
   border: none;
   border-radius: 6px;
   background-color: #000000;
@@ -63,16 +63,6 @@ button {
   cursor: pointer;
   transition: background-color 0.3s, transform 0.1s;
 }
-
-/* button:hover {
-  background-color: #9f9f9f;
-  transform: scale(1.05);
-} */
-
-/* button:active {
-  background-color: #004085;
-  transform: scale(1);
-} */
 
 .toggle-auth {
   margin-top: 20px;

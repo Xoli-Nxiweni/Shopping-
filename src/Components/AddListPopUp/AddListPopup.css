@@ -56,8 +56,7 @@ form input {
 }
 
 button {
-  padding: 10px 15px;
-  background: #888e95;
+  /* padding: 10px 15px; */
   color: white;
   border: none;
   border-radius: 5px;

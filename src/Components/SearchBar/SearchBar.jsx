@@ -72,11 +72,11 @@ function SearchAppBar({ onSearchChange }) {
     <Box sx={{ flexGrow: 0,
     }}>
       <Search sx={{
-        padding: '0 10px'
+        padding: '0 10px',
       }} >
         <SearchIconWrapper  >
           <SearchIcon  sx={{
-            // zIndex: 1
+            zIndex: 1
           }}/>X
         </SearchIconWrapper  >
         <StyledInputBase

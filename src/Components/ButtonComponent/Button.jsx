@@ -1,6 +1,6 @@
 import './Button.css';
 import AddIcon from '@mui/icons-material/Add';
-import ClearIcon from '@mui/icons-material/Clear';
+// import ClearIcon from '@mui/icons-material/Clear';
 import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined';
 import ShareOutlinedIcon from '@mui/icons-material/ShareOutlined';
 

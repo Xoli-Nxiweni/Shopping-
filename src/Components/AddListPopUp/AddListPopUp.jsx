@@ -356,6 +356,7 @@ const AddListPopup = ({ onClose, onSubmit, list }) => {
       return;
     }
     const updatedList = {
+      // eslint-disable-next-line react/prop-types
       id: list ? list.id : Date.now().toString(),
       name,
       items,
