@@ -414,6 +414,616 @@
 // export default MainComponent;
 
 
+// import { useState, useEffect } from 'react';
+// import { useDispatch, useSelector } from 'react-redux';
+// import { fetchLists, createList, updateList, deleteList } from '../../slices/listsSlice';
+// import AddButton from '../ButtonComponent/Button';
+// import SellOutlinedIcon from '@mui/icons-material/SellOutlined';
+// import Loader from '../Loader/Loader';
+// import AddListPopup from '../AddListPopUp/AddListPopUp';
+// import SearchAppBar from '../SearchBar/SearchBar';
+// import EditList from '../EditLists/EditList';
+// import './Main.css';
+
+// const MainComponent = () => {
+//   const dispatch = useDispatch();
+//   const { lists = [], status, error } = useSelector((state) => state.lists);
+//   const isLoading = useSelector((state) => state.loading.isLoading);
+//   const [showAddPopup, setShowAddPopup] = useState(false);
+//   const [showEditPopup, setShowEditPopup] = useState(false);
+//   const [searchTerm, setSearchTerm] = useState('');
+//   const [filteredLists, setFilteredLists] = useState([]);
+//   const [editingList, setEditingList] = useState(null); // For editing list
+
+//   useEffect(() => {
+//     if (status === 'idle') {
+//       dispatch(fetchLists());
+//     }
+//   }, [status, dispatch]);
+
+//   // useEffect(() => {
+//   //   if (searchTerm) {
+//   //     const filtered = lists.filter(list =>
+//   //       list.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+//   //       list.items.some(item =>
+//   //         item.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+//   //         item.quantity.toLowerCase().includes(searchTerm.toLowerCase())
+//   //       )
+//   //     );
+//   //     setFilteredLists(filtered);
+//   //   } else {
+//   //     setFilteredLists(lists);
+//   //   }
+//   // }, [searchTerm, lists]);
+
+//   useEffect(() => {
+//     if (searchTerm) {
+//       const filtered = lists.filter(list =>
+//         list.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+//         list.items?.some(item =>
+//           item.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+//           item.quantity?.toLowerCase().includes(searchTerm.toLowerCase())
+//         )
+//       );
+//       setFilteredLists(filtered);
+//     } else {
+//       setFilteredLists(lists);
+//     }
+//   }, [searchTerm, lists]);
+  
+
+//   const handleAddList = () => {
+//     setEditingList(null); // Clear editing state
+//     setShowPopup(true);
+//   };
+
+//   const handleEditList = (list) => {
+//     setEditingList(list);
+//     setShowPopup(true);
+//   };
+
+//   const handleClosePopup = () => {
+//     setShowPopup(false);
+//   };
+
+//   const handleAddListSubmit = (list) => {
+//     if (editingList) {
+//       dispatch(updateList(list)); // Update existing list
+//     } else {
+//       dispatch(createList(list)); // Add new list
+//     }
+//     handleClosePopup();
+//   };
+
+//   const handleDeleteList = (id) => {
+//     dispatch(deleteList(id)); // Delete list
+//   };
+
+//   // Add console logs for debugging
+//   console.log('Lists:', lists);
+//   console.log('Status:', status);
+//   console.log('Error:', error);
+
+//   return (
+//     <div className="Wrapper">
+//       {isLoading && <Loader />}
+
+//       <div className="left">
+//         <AddButton label="Add New List" onClick={handleAddList} />
+//         <div className="searchContainer">
+//           <SearchAppBar onSearchChange={setSearchTerm} />
+//         </div>
+//         <div className="Container">
+//           {status === 'failed' && <p>Error: {error}</p>}
+//           {filteredLists.length > 0 ? (
+//             <ul className="unorderedList">
+//               {filteredLists.map((list) => (
+//                 <div key={list.id} className={list.items && list.items.length > 0 ? 'containerList' : 'containerList2'}>
+//                   <div className="tag">
+//                     <SellOutlinedIcon className='searchIcon'/>
+//                   </div>
+//                   <span style={{ fontWeight: 600 }}>{list.name}</span>
+//                   <ul className="ListWrapper">
+//                     {list.items && list.items.length > 0 ? (
+//                       list.items.map((item, index) => (
+//                         <li key={index} className="listItem" style={{ borderBottom: '1px solid #a6a6a6' }}>
+//                           {item}
+//                         </li>
+//                       ))
+//                     ) : (
+//                       <li>No items available</li>
+//                     )}
+//                   </ul>
+//                   <button style={{
+//                     background:'#0a0a0a',
+//                     margin: '10px 10px 10px 0'
+//                   }} onClick={() => handleEditList(list)}>Edit</button>
+//                   <button style={{
+//                     background:'#0a0a0a',
+//                     margin: '10px 10px 10px 0'
+//                   }} onClick={() => handleDeleteList(list.id)}>Delete</button>
+//                 </div>
+//               ))}
+//             </ul>
+//           ) : (
+//             <p>No lists available</p>
+//           )}
+//         </div>
+//       </div>
+
+//       {showEditPopup && (
+//         <div className="popup-overlay">
+//           <div className="popup-content">
+//             <button className="close-btn" onClick={handleClosePopup}>X</button>
+//             <AddListPopup onClose={handleClosePopup} onSubmit={handleAddListSubmit} list={editingList} />
+//           </div>
+//         </div>
+//       )}
+//       {showAddPopup && (
+//         <div className="popup-overlay">
+//           <div className="popup-content">
+//             <button className="close-btn" onClick={handleClosePopup}>X</button>
+//             <AddListPopup onClose={handleClosePopup} onSubmit={handleAddListSubmit} list={editingList} />
+//           </div>
+//         </div>
+//       )}
+//     </div>
+//   );
+// };
+
+// export default MainComponent;
+
+// import { useState, useEffect } from 'react';
+// import { useDispatch, useSelector } from 'react-redux';
+// import { fetchLists, createList, updateList, deleteList } from '../../slices/listsSlice';
+// import AddButton from '../ButtonComponent/Button';
+// import SellOutlinedIcon from '@mui/icons-material/SellOutlined';
+// import Loader from '../Loader/Loader';
+// import AddListPopup from '../AddListPopUp/AddListPopUp';
+// import EditListPopup from '../EditLists/EditList' // Import the EditListPopup component
+// import SearchAppBar from '../SearchBar/SearchBar';
+// import './Main.css';
+
+// const MainComponent = () => {
+//   const dispatch = useDispatch();
+//   const { lists = [], status, error } = useSelector((state) => state.lists);
+//   const isLoading = useSelector((state) => state.loading.isLoading);
+//   const [showAddPopup, setShowAddPopup] = useState(false);
+//   const [showEditPopup, setShowEditPopup] = useState(false);
+//   const [searchTerm, setSearchTerm] = useState('');
+//   const [filteredLists, setFilteredLists] = useState([]);
+//   const [editingList, setEditingList] = useState(null); // For editing list
+
+//   useEffect(() => {
+//     if (status === 'idle') {
+//       dispatch(fetchLists());
+//     }
+//   }, [status, dispatch]);
+
+//   useEffect(() => {
+//     if (searchTerm) {
+//       const filtered = lists.filter(list =>
+//         list.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+//         list.items?.some(item =>
+//           item.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+//           item.quantity?.toLowerCase().includes(searchTerm.toLowerCase())
+//         )
+//       );
+//       setFilteredLists(filtered);
+//     } else {
+//       setFilteredLists(lists);
+//     }
+//   }, [searchTerm, lists]);
+
+//   const handleAddList = () => {
+//     setEditingList(null); // Clear editing state
+//     setShowAddPopup(true);
+//   };
+
+//   const handleEditList = (list) => {
+//     setEditingList(list);
+//     setShowEditPopup(true);
+//   };
+
+//   const handleClosePopup = () => {
+//     setShowAddPopup(false);
+//     setShowEditPopup(false);
+//   };
+
+//   const handleAddListSubmit = (list) => {
+//     if (editingList) {
+//       dispatch(updateList(list)); // Update existing list
+//     } else {
+//       dispatch(createList(list)); // Add new list
+//     }
+//     handleClosePopup();
+//   };
+
+//   const handleEditListSubmit = (updatedList) => {
+//     dispatch(updateList(updatedList)); // Update existing list
+//     handleClosePopup();
+//   };
+
+//   const handleDeleteList = (id) => {
+//     dispatch(deleteList(id)); // Delete list
+//   };
+
+//   // Add console logs for debugging
+//   console.log('Lists:', lists);
+//   console.log('Status:', status);
+//   console.log('Error:', error);
+
+//   return (
+//     <div className="Wrapper">
+//       {isLoading && <Loader />}
+
+//       <div className="left">
+//         <AddButton label="Add New List" onClick={handleAddList} />
+//         <div className="searchContainer">
+//           <SearchAppBar onSearchChange={setSearchTerm} />
+//         </div>
+//         <div className="Container">
+//           {status === 'failed' && <p>Error: {error}</p>}
+//           {filteredLists.length > 0 ? (
+//             <ul className="unorderedList">
+//               {filteredLists.map((list) => (
+//                 <div key={list.id} className={list.items && list.items.length > 0 ? 'containerList' : 'containerList2'}>
+//                   <div className="tag">
+//                     <SellOutlinedIcon className='searchIcon'/>
+//                   </div>
+//                   <span style={{ fontWeight: 600 }}>{list.name}</span>
+//                   <ul className="ListWrapper">
+//                     {list.items && list.items.length > 0 ? (
+//                       list.items.map((item, index) => (
+//                         <li key={index} className="listItem" style={{ borderBottom: '1px solid #a6a6a6' }}>
+//                           {item}
+//                         </li>
+//                       ))
+//                     ) : (
+//                       <li>No items available</li>
+//                     )}
+//                   </ul>
+//                   <button style={{
+//                     background:'#0a0a0a',
+//                     margin: '10px 10px 10px 0'
+//                   }} onClick={() => handleEditList(list)}>Edit</button>
+//                   <button style={{
+//                     background:'#0a0a0a',
+//                     margin: '10px 10px 10px 0'
+//                   }} onClick={() => handleDeleteList(list.id)}>Delete</button>
+//                 </div>
+//               ))}
+//             </ul>
+//           ) : (
+//             <p>No lists available</p>
+//           )}
+//         </div>
+//       </div>
+
+//       {showAddPopup && (
+//         <div className="popup-overlay">
+//           <div className="popup-content">
+//             <button className="close-btn" onClick={handleClosePopup}>X</button>
+//             <AddListPopup onClose={handleClosePopup} onSubmit={handleAddListSubmit} list={editingList} />
+//           </div>
+//         </div>
+//       )}
+
+//       {showEditPopup && (
+//         <div className="popup-overlay">
+//           <div className="popup-content">
+//             <button className="close-btn" onClick={handleClosePopup}>X</button>
+//             <EditListPopup onClose={handleClosePopup} onSubmit={handleEditListSubmit} list={editingList} />
+//           </div>
+//         </div>
+//       )}
+//     </div>
+//   );
+// };
+
+// export default MainComponent;
+
+
+// import { useState, useEffect } from 'react';
+// import { useDispatch, useSelector } from 'react-redux';
+// import { fetchLists, createList, updateList, deleteList } from '../../slices/listsSlice';
+// import AddButton from '../ButtonComponent/Button';
+// import SellOutlinedIcon from '@mui/icons-material/SellOutlined';
+// import Loader from '../Loader/Loader';
+// import AddListPopup from '../AddListPopUp/AddListPopUp';
+// import EditListPopup from '../EditLists/EditList'; // Import the EditListPopup component
+// import SearchAppBar from '../SearchBar/SearchBar';
+// import './Main.css';
+
+// const MainComponent = () => {
+//   const dispatch = useDispatch();
+//   const { lists = [], status, error } = useSelector((state) => state.lists);
+//   const isLoading = useSelector((state) => state.loading.isLoading);
+//   const [showAddPopup, setShowAddPopup] = useState(false);
+//   const [showEditPopup, setShowEditPopup] = useState(false);
+//   const [searchTerm, setSearchTerm] = useState('');
+//   const [filteredLists, setFilteredLists] = useState([]);
+//   const [editingList, setEditingList] = useState(null); // For editing list
+
+//   useEffect(() => {
+//     if (status === 'idle') {
+//       dispatch(fetchLists());
+//     }
+//   }, [status, dispatch]);
+
+//   useEffect(() => {
+//     if (searchTerm) {
+//       const filtered = lists.filter(list =>
+//         list.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+//         list.items?.some(item =>
+//           item.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+//           item.quantity?.toLowerCase().includes(searchTerm.toLowerCase())
+//         )
+//       );
+//       setFilteredLists(filtered);
+//     } else {
+//       setFilteredLists(lists);
+//     }
+//   }, [searchTerm, lists]);
+
+//   const handleAddList = () => {
+//     setEditingList(null); // Clear editing state
+//     setShowAddPopup(true);
+//   };
+
+//   const handleEditList = (list) => {
+//     setEditingList(list);
+//     setShowEditPopup(true);
+//   };
+
+//   const handleClosePopup = () => {
+//     setShowAddPopup(false);
+//     setShowEditPopup(false);
+//   };
+
+//   const handleAddListSubmit = (list) => {
+//     if (editingList) {
+//       dispatch(updateList(list)); // Update existing list
+//     } else {
+//       dispatch(createList(list)); // Add new list
+//     }
+//     handleClosePopup();
+//   };
+
+//   const handleEditListSubmit = (updatedList) => {
+//     dispatch(updateList(updatedList)); // Update existing list
+//     handleClosePopup();
+//   };
+
+//   const handleDeleteList = (id) => {
+//     dispatch(deleteList(id)); // Delete list
+//   };
+
+//   // Add console logs for debugging
+//   console.log('Lists:', lists);
+//   console.log('Status:', status);
+//   console.log('Error:', error);
+
+//   return (
+//     <div className="Wrapper">
+//       {isLoading && <Loader />}
+
+//       <div className="left">
+//         <AddButton label="Add New List" onClick={handleAddList} />
+//         <div className="searchContainer">
+//           <SearchAppBar onSearchChange={setSearchTerm} />
+//         </div>
+//         <div className="Container">
+//           {status === 'failed' && <p>Error: {error}</p>}
+//           {filteredLists.length > 0 ? (
+//             <ul className="unorderedList">
+//               {filteredLists.map((list) => (
+//                 <div key={list.id} className={list.items && list.items.length > 0 ? 'containerList' : 'containerList2'}>
+//                   <div className="tag">
+//                     <SellOutlinedIcon className='searchIcon'/>
+//                   </div>
+//                   <span style={{ fontWeight: 600 }}>{list.name}</span>
+//                   <ul className="ListWrapper">
+//                     {list.items && list.items.length > 0 ? (
+//                       list.items.map((item, index) => (
+//                         <li key={index} className="listItem" style={{ borderBottom: '1px solid #a6a6a6' }}>
+//                           {item}
+//                         </li>
+//                       ))
+//                     ) : (
+//                       <li>No items available</li>
+//                     )}
+//                   </ul>
+//                   <button style={{
+//                     background:'#0a0a0a',
+//                     margin: '10px 10px 10px 0'
+//                   }} onClick={() => handleEditList(list)}>Edit</button>
+//                   <button style={{
+//                     background:'#0a0a0a',
+//                     margin: '10px 10px 10px 0'
+//                   }} onClick={() => handleDeleteList(list.id)}>Delete</button>
+//                 </div>
+//               ))}
+//             </ul>
+//           ) : (
+//             <p>No lists available</p>
+//           )}
+//         </div>
+//       </div>
+
+//       {showAddPopup && (
+//         <div className="popup-overlay">
+//           <div className="popup-content">
+//             <button className="close-btn" onClick={handleClosePopup}>X</button>
+//             <AddListPopup onClose={handleClosePopup} onSubmit={handleAddListSubmit} list={editingList} />
+//           </div>
+//         </div>
+//       )}
+
+//       {showEditPopup && (
+//         <div className="popup-overlay">
+//           <div className="popup-content">
+//             <button className="close-btn" onClick={handleClosePopup}>X</button>
+//             <EditListPopup onClose={handleClosePopup} onSubmit={handleEditListSubmit} list={editingList} />
+//           </div>
+//         </div>
+//       )}
+//     </div>
+//   );
+// };
+
+// export default MainComponent;
+
+// import { useState, useEffect } from 'react';
+// import { useDispatch, useSelector } from 'react-redux';
+// import { fetchLists, createList, updateList, deleteList } from '../../slices/listsSlice';
+// import AddButton from '../ButtonComponent/Button';
+// import SellOutlinedIcon from '@mui/icons-material/SellOutlined';
+// import Loader from '../Loader/Loader';
+// import AddListPopup from '../AddListPopUp/AddListPopUp';
+// import EditListPopup from '../EditLists/EditList'; // Import the EditListPopup component
+// import SearchAppBar from '../SearchBar/SearchBar';
+// import './Main.css';
+
+// const MainComponent = () => {
+//   const dispatch = useDispatch();
+//   const { lists = [], status, error } = useSelector((state) => state.lists);
+//   const isLoading = useSelector((state) => state.loading.isLoading);
+//   const [showAddPopup, setShowAddPopup] = useState(false);
+//   const [showEditPopup, setShowEditPopup] = useState(false);
+//   const [searchTerm, setSearchTerm] = useState('');
+//   const [filteredLists, setFilteredLists] = useState([]);
+//   const [editingList, setEditingList] = useState(null); // For editing list
+
+//   useEffect(() => {
+//     if (status === 'idle') {
+//       dispatch(fetchLists());
+//     }
+//   }, [status, dispatch]);
+
+//   useEffect(() => {
+//     if (searchTerm) {
+//       const filtered = lists.filter(list =>
+//         list.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+//         list.items?.some(item =>
+//           item.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+//           item.quantity?.toLowerCase().includes(searchTerm.toLowerCase())
+//         )
+//       );
+//       setFilteredLists(filtered);
+//     } else {
+//       setFilteredLists(lists);
+//     }
+//   }, [searchTerm, lists]);
+
+//   const handleAddList = () => {
+//     setEditingList(null); // Clear editing state
+//     setShowAddPopup(true);
+//   };
+
+//   const handleEditList = (list) => {
+//     setEditingList(list);
+//     setShowEditPopup(true);
+//   };
+
+//   const handleClosePopup = () => {
+//     setShowAddPopup(false);
+//     setShowEditPopup(false);
+//   };
+
+//   const handleAddListSubmit = (list) => {
+//     if (editingList) {
+//       dispatch(updateList(list)); // Update existing list
+//     } else {
+//       dispatch(createList(list)); // Add new list
+//     }
+//     handleClosePopup();
+//   };
+
+//   const handleEditListSubmit = (updatedList) => {
+//     dispatch(updateList(updatedList)); // Update existing list
+//     handleClosePopup();
+//   };
+
+//   const handleDeleteList = (id) => {
+//     dispatch(deleteList(id)); // Delete list
+//   };
+
+//   // Add console logs for debugging
+//   console.log('Lists:', lists);
+//   console.log('Status:', status);
+//   console.log('Error:', error);
+
+//   return (
+//     <div className="Wrapper">
+//       {isLoading && <Loader />}
+
+//       <div className="left">
+//         <AddButton label="Add New List" onClick={handleAddList} />
+//         <div className="searchContainer">
+//           <SearchAppBar onSearchChange={setSearchTerm} />
+//         </div>
+//         <div className="Container">
+//           {status === 'failed' && <p>Error: {error}</p>}
+//           {filteredLists.length > 0 ? (
+//             <ul className="unorderedList">
+//               {filteredLists.map((list) => (
+//                 <div key={list.id} className={list.items && list.items.length > 0 ? 'containerList' : 'containerList2'}>
+//                   <div className="tag">
+//                     <SellOutlinedIcon className='searchIcon'/>
+//                   </div>
+//                   <span style={{ fontWeight: 600 }}>{list.name}</span>
+//                   <ul className="ListWrapper">
+//                     {list.items && list.items.length > 0 ? (
+//                       list.items.map((item, index) => (
+//                         <li key={index} className="listItem" style={{ borderBottom: '1px solid #a6a6a6' }}>
+//                           {item}
+//                         </li>
+//                       ))
+//                     ) : (
+//                       <li>No items available</li>
+//                     )}
+//                   </ul>
+//                   <button style={{
+//                     background:'#0a0a0a',
+//                     margin: '10px 10px 10px 0'
+//                   }} onClick={() => handleEditList(list)}>Edit</button>
+//                   <button style={{
+//                     background:'#0a0a0a',
+//                     margin: '10px 10px 10px 0'
+//                   }} onClick={() => handleDeleteList(list.id)}>Delete</button>
+//                 </div>
+//               ))}
+//             </ul>
+//           ) : (
+//             <p>No lists available</p>
+//           )}
+//         </div>
+//       </div>
+
+//       {showAddPopup && (
+//         <div className="popup-overlay">
+//           <div className="popup-content">
+//             <button className="close-btn" onClick={handleClosePopup}>X</button>
+//             <AddListPopup onClose={handleClosePopup} onSubmit={handleAddListSubmit} list={editingList} />
+//           </div>
+//         </div>
+//       )}
+
+//       {showEditPopup && (
+//         <div className="popup-overlay">
+//           <div className="popup-content">
+//             <button className="close-btn" onClick={handleClosePopup}>X</button>
+//             <EditListPopup onClose={handleClosePopup} onSubmit={handleEditListSubmit} list={editingList} />
+//           </div>
+//         </div>
+//       )}
+//     </div>
+//   );
+// };
+
+// export default MainComponent;
+
 import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchLists, createList, updateList, deleteList } from '../../slices/listsSlice';
@@ -421,14 +1031,17 @@ import AddButton from '../ButtonComponent/Button';
 import SellOutlinedIcon from '@mui/icons-material/SellOutlined';
 import Loader from '../Loader/Loader';
 import AddListPopup from '../AddListPopUp/AddListPopUp';
+import EditListPopup from '../EditLists/EditList'; // Import the EditListPopup component
 import SearchAppBar from '../SearchBar/SearchBar';
+import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Typography } from '@mui/material';
 import './Main.css';
 
 const MainComponent = () => {
   const dispatch = useDispatch();
   const { lists = [], status, error } = useSelector((state) => state.lists);
   const isLoading = useSelector((state) => state.loading.isLoading);
-  const [showPopup, setShowPopup] = useState(false);
+  const [showAddPopup, setShowAddPopup] = useState(false);
+  const [showEditPopup, setShowEditPopup] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const [filteredLists, setFilteredLists] = useState([]);
   const [editingList, setEditingList] = useState(null); // For editing list
@@ -442,10 +1055,10 @@ const MainComponent = () => {
   useEffect(() => {
     if (searchTerm) {
       const filtered = lists.filter(list =>
-        list.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        list.items.some(item =>
-          item.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          item.quantity.toLowerCase().includes(searchTerm.toLowerCase())
+        list.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        list.items?.some(item =>
+          item.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          item.quantity?.toLowerCase().includes(searchTerm.toLowerCase())
         )
       );
       setFilteredLists(filtered);
@@ -456,16 +1069,17 @@ const MainComponent = () => {
 
   const handleAddList = () => {
     setEditingList(null); // Clear editing state
-    setShowPopup(true);
+    setShowAddPopup(true);
   };
 
   const handleEditList = (list) => {
     setEditingList(list);
-    setShowPopup(true);
+    setShowEditPopup(true);
   };
 
   const handleClosePopup = () => {
-    setShowPopup(false);
+    setShowAddPopup(false);
+    setShowEditPopup(false);
   };
 
   const handleAddListSubmit = (list) => {
@@ -474,6 +1088,11 @@ const MainComponent = () => {
     } else {
       dispatch(createList(list)); // Add new list
     }
+    handleClosePopup();
+  };
+
+  const handleEditListSubmit = (updatedList) => {
+    dispatch(updateList(updatedList)); // Update existing list
     handleClosePopup();
   };
 
@@ -504,7 +1123,7 @@ const MainComponent = () => {
                   <div className="tag">
                     <SellOutlinedIcon className='searchIcon'/>
                   </div>
-                  <span style={{ fontWeight: 600 }}>{list.name}</span>
+                  <Typography variant="h6" component="span" style={{ fontWeight: 600 }}>{list.name}</Typography>
                   <ul className="ListWrapper">
                     {list.items && list.items.length > 0 ? (
                       list.items.map((item, index) => (
@@ -516,14 +1135,8 @@ const MainComponent = () => {
                       <li>No items available</li>
                     )}
                   </ul>
-                  <button style={{
-                    background:'#0a0a0a',
-                    margin: '10px 10px 10px 0'
-                  }} onClick={() => handleEditList(list)}>Edit</button>
-                  <button style={{
-                    background:'#0a0a0a',
-                    margin: '10px 10px 10px 0'
-                  }} onClick={() => handleDeleteList(list.id)}>Delete</button>
+                  <Button variant="contained" color="primary" onClick={() => handleEditList(list)} style={{ margin: '10px' }}>Edit</Button>
+                  <Button variant="contained" color="warning" onClick={() => handleDeleteList(list.id)} style={{ margin: '10px' }}>Delete</Button>
                 </div>
               ))}
             </ul>
@@ -533,14 +1146,27 @@ const MainComponent = () => {
         </div>
       </div>
 
-      {showPopup && (
-        <div className="popup-overlay">
-          <div className="popup-content">
-            <button className="close-btn" onClick={handleClosePopup}>X</button>
-            <AddListPopup onClose={handleClosePopup} onSubmit={handleAddListSubmit} list={editingList} />
-          </div>
-        </div>
-      )}
+      {/* Add List Popup */}
+      <Dialog open={showAddPopup} onClose={handleClosePopup}>
+        <DialogTitle>Add New List</DialogTitle>
+        <DialogContent>
+          <AddListPopup onClose={handleClosePopup} onSubmit={handleAddListSubmit} />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClosePopup} color="primary">Cancel</Button>
+        </DialogActions>
+      </Dialog>
+
+      {/* Edit List Popup */}
+      <Dialog open={showEditPopup} onClose={handleClosePopup}>
+        <DialogTitle>Edit List</DialogTitle>
+        <DialogContent>
+          <EditListPopup onClose={handleClosePopup} onSubmit={handleEditListSubmit} list={editingList} />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClosePopup} color="primary">Cancel</Button>
+        </DialogActions>
+      </Dialog>
     </div>
   );
 };

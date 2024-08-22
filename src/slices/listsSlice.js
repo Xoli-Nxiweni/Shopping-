@@ -2,7 +2,7 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 
 // Fetch lists
 export const fetchLists = createAsyncThunk('lists/fetchLists', async () => {
-  const response = await fetch('http://localhost:5000/users/1'); // Adjust the endpoint to fetch the user and their lists
+  const response = await fetch('http://localhost:5000/users/1/'); // Adjust the endpoint to fetch the user and their lists
   if (!response.ok) {
     throw new Error('Network response was not ok');
   }
@@ -48,7 +48,7 @@ export const updateList = createAsyncThunk('lists/updateList', async (updatedLis
 
 // Delete a list
 export const deleteList = createAsyncThunk('lists/deleteList', async (listId) => {
-  const response = await fetch(`http://localhost:5000/users/1/lists/${listId}`, { // Adjust the endpoint as needed
+  const response = await fetch(`http://localhost:5000/users/1?lists/${listId}`, { // Adjust the endpoint as needed
     method: 'DELETE',
   });
   if (!response.ok) {
