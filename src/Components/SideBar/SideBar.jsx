@@ -1,4 +1,4 @@
-import * as React from 'react';
+import { useEffect, useState } from 'react';
 import { styled, useTheme } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import Drawer from '@mui/material/Drawer';
@@ -14,14 +14,11 @@ import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
-import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-import InboxIcon from '@mui/icons-material/MoveToInbox';
-import MailIcon from '@mui/icons-material/Mail';
-import MainComponent from '../MainComponent/Main';
+import { useDispatch, useSelector } from 'react-redux';
 import { logout } from '../../slices/authSlice'; // Adjust the import path as needed
+import MainComponent from '../MainComponent/Main';
 import './SideBar.css';
-import { useDispatch } from 'react-redux';
 
 const drawerWidth = 240;
 
@@ -71,9 +68,30 @@ const DrawerHeader = styled('div')(({ theme }) => ({
 
 const PersistentDrawerLeft = () => {
   const theme = useTheme();
-  const [open, setOpen] = React.useState(false);
-  const [selectedCategory, setSelectedCategory] = React.useState(null);
+  const [open, setOpen] = useState(false);
+  const [selectedCategory, setSelectedCategory] = useState(null);
+  const [filteredLists, setFilteredLists] = useState([]);
   const dispatch = useDispatch();
+
+  // Fetch or define your list data (replace this with actual data fetch if needed)
+  const lists = useSelector((state) => state.lists.data || []); // Ensure lists has a default empty array
+
+  useEffect(() => {
+    console.log('Lists:', lists); // Debug logging to verify lists value
+    if (lists && lists.length) { // Ensure lists is defined and has a length
+      if (selectedCategory) {
+        const filtered = lists.filter(list =>
+          list.name?.toLowerCase().includes(selectedCategory.toLowerCase()) ||
+          list.items?.some(item =>
+            item.toLowerCase().includes(selectedCategory.toLowerCase())
+          )
+        );
+        setFilteredLists(filtered);
+      } else {
+        setFilteredLists(lists);
+      }
+    }
+  }, [selectedCategory, lists]);
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -92,6 +110,13 @@ const PersistentDrawerLeft = () => {
   const handleCategoryClick = (category) => {
     setSelectedCategory(category);
   };
+
+  const categories = [
+    'Groceries', 'Office Supplies', 'Cleaning Products', 'Electronics',
+    'Books', 'Gardening Supplies', 'Pet Supplies', 'Health & Wellness',
+    'Fitness', 'Kitchen Gadgets', 'Toys', 'Office Furniture',
+    'Travel Essentials', 'Arts & Crafts', 'Seasonal Decor', 'Personal Care'
+  ];
 
   return (
     <Box sx={{ display: 'flex' }}>
@@ -118,6 +143,7 @@ const PersistentDrawerLeft = () => {
             alignItems: 'center', 
             justifyContent: 'space-between' 
             }}>
+            {/* Add any content if needed */}
           </Typography>
         </Toolbar>
       </AppBar>
@@ -130,7 +156,7 @@ const PersistentDrawerLeft = () => {
             boxSizing: 'border-box',
             background: '#000',
             color: '#fff',
-            textAlign:'center',
+            textAlign: 'center',
             display: 'flex',
             flexDirection: 'column'
           },
@@ -149,56 +175,15 @@ const PersistentDrawerLeft = () => {
         </div>
         <Divider />
         <List>
-          {['Groceries', 'Office Supplies', 'Cleaning Products', 'Electronics'].map((category) => (
+          {categories.map((category) => (
             <ListItem key={category} disablePadding>
               <ListItemButton onClick={() => handleCategoryClick(category)}>
-                {/* <ListItemIcon> */}
-                  {/* <InboxIcon /> */}
-                {/* </ListItemIcon> */}
                 <ListItemText primary={category} />
               </ListItemButton>
             </ListItem>
           ))}
         </List>
         <Divider />
-        <List>
-          {['Books', 'Gardening Supplies', 'Pet Supplies', 'Health & Wellness'].map((category) => (
-            <ListItem key={category} disablePadding>
-              <ListItemButton onClick={() => handleCategoryClick(category)}>
-                {/* <ListItemIcon> */}
-                  {/* <MailIcon /> */}
-                {/* </ListItemIcon> */}
-                <ListItemText primary={category} />
-              </ListItemButton>
-            </ListItem>
-          ))}
-        </List>
-        <Divider />
-        <List>
-          {['Fitness', 'Kitchen Gadgets', 'Toys', 'Office Furniture'].map((category) => (
-            <ListItem key={category} disablePadding>
-              <ListItemButton onClick={() => handleCategoryClick(category)}>
-                {/* <ListItemIcon> */}
-                  {/* <InboxIcon /> */}
-                {/* </ListItemIcon> */}
-                <ListItemText primary={category} />
-              </ListItemButton>
-            </ListItem>
-          ))}
-        </List>
-        <Divider />
-        <List>
-          {['Travel Essentials', 'Arts & Crafts', 'Seasonal Decor', 'Personal Care'].map((category) => (
-            <ListItem key={category} disablePadding>
-              <ListItemButton onClick={() => handleCategoryClick(category)}>
-                {/* <ListItemIcon> */}
-                  {/* <MailIcon /> */}
-                {/* </ListItemIcon> */}
-                <ListItemText primary={category} />
-              </ListItemButton>
-            </ListItem>
-          ))}
-        </List>
         <div className="Logout">
           <button onClick={handleLogout} style={{
             background: 'red',
@@ -213,7 +198,7 @@ const PersistentDrawerLeft = () => {
       <Main open={open}>
         <DrawerHeader />
         <Typography variant="div">
-          <MainComponent selectedCategory={selectedCategory} />
+        <MainComponent selectedCategory={selectedCategory} filteredLists={filteredLists} />
         </Typography>
         <Typography paragraph>
           {/* Additional content here */}
@@ -221,6 +206,6 @@ const PersistentDrawerLeft = () => {
       </Main>
     </Box>
   );
-}
+};
 
 export default PersistentDrawerLeft;
