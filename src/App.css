@@ -14,11 +14,12 @@
   width: 8px;
 }
 ::-webkit-scrollbar-thumb{
-  background: #9f9f9f;
+  background: #000000;
   border-radius: 4px;
 }
 body{
   height: 100vh;
+  background: whitesmoke;
 }
 .Wrapper2{
   background: whitesmoke;

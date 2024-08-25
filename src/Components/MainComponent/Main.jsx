@@ -5,14 +5,14 @@ import AddButton from '../ButtonComponent/Button';
 import SellOutlinedIcon from '@mui/icons-material/SellOutlined';
 import Loader from '../Loader/Loader';
 import SearchAppBar from '../SearchBar/SearchBar';
-import { Button, Dialog, DialogActions, DialogContent, DialogTitle, TextField, Typography } from '@mui/material';
+import { Button, Dialog, DialogActions, DialogContent, DialogTitle, TextField, Typography, Select, MenuItem } from '@mui/material';
 import ShareOutlinedIcon from '@mui/icons-material/ShareOutlined';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditNoteIcon from '@mui/icons-material/EditNote';
 import './Main.css';
 
 // eslint-disable-next-line react/prop-types
-const MainComponent = ({ selectedCategory }) => {
+const MainComponent = ({ initialCategory }) => { // Renamed prop
   const dispatch = useDispatch();
   const { lists = [], status, error } = useSelector((state) => state.lists);
   const isLoading = useSelector((state) => state.loading.isLoading);
@@ -26,8 +26,10 @@ const MainComponent = ({ selectedCategory }) => {
   const [editingList, setEditingList] = useState(null);
   const [listName, setListName] = useState('');
   const [listItems, setListItems] = useState([]);
-  const [setSelectedListToShare] = useState(null);
+  const [selectedListToShare, setSelectedListToShare] = useState(null);
   const [shareableLink, setShareableLink] = useState('');
+  const [categories, setCategories] = useState([]);
+  const [selectedCategory, setSelectedCategory] = useState(initialCategory || ''); // Use prop value if available
 
   useEffect(() => {
     if (status === 'idle') {
@@ -40,10 +42,8 @@ const MainComponent = ({ selectedCategory }) => {
 
     if (selectedCategory) {
       filtered = filtered.filter(list =>
-        // eslint-disable-next-line react/prop-types
         list.name?.toLowerCase().includes(selectedCategory.toLowerCase()) ||
         list.items?.some(item =>
-          // eslint-disable-next-line react/prop-types
           item.toLowerCase().includes(selectedCategory.toLowerCase())
         )
       );
@@ -61,11 +61,33 @@ const MainComponent = ({ selectedCategory }) => {
     setFilteredListsState(filtered);
   }, [searchTerm, lists, selectedCategory]);
 
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const response = await fetch(`http://localhost:5000/categories`);
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        const data = await response.json();
+        // Ensure data is in the expected format
+        if (Array.isArray(data) && typeof data[0] === 'string') {
+          setCategories(data);
+        } else {
+          console.error('Unexpected format for categories:', data);
+        }
+      } catch (error) {
+        console.error('Failed to fetch categories:', error);
+      }
+    };
+
+    fetchCategories();
+  }, []);
+
   const handleAddListSubmit = async () => {
-    const newList = { name: listName, items: listItems };
+    const newList = { name: listName, items: listItems, category: selectedCategory };
     try {
       if (editingList) {
-        await dispatch(updateList({ ...editingList, name: listName, items: listItems }));
+        await dispatch(updateList({ ...editingList, name: listName, items: listItems, category: selectedCategory }));
         setNotificationMessage('List updated successfully!');
       } else {
         await dispatch(createList(newList));
@@ -77,10 +99,9 @@ const MainComponent = ({ selectedCategory }) => {
       setNotificationMessage('Error occurred: ' + error.message);
     }
     setShowNotification(true);
-    // Set timer to close notification and redirect
     setTimeout(() => {
       setShowNotification(false);
-      window.location.href = '/'; // Redirect to landing page
+      window.location.href = '/';
     }, 2000);
   };
 
@@ -93,10 +114,9 @@ const MainComponent = ({ selectedCategory }) => {
       setNotificationMessage('Error occurred: ' + error.message);
     }
     setShowNotification(true);
-    // Set timer to close notification and redirect
     setTimeout(() => {
       setShowNotification(false);
-      window.location.href = '/'; // Redirect to landing page
+      window.location.href = '/';
     }, 2000);
   };
 
@@ -104,6 +124,7 @@ const MainComponent = ({ selectedCategory }) => {
     setEditingList(null);
     setListName('');
     setListItems([]);
+    setSelectedCategory('');
     setShowAddPopup(true);
   };
 
@@ -111,12 +132,13 @@ const MainComponent = ({ selectedCategory }) => {
     setEditingList(list);
     setListName(list.name);
     setListItems(list.items);
+    setSelectedCategory(list.category || '');
     setShowEditPopup(true);
   };
 
   const handleShareList = (list) => {
     setSelectedListToShare(list);
-    const link = `https://myapp.com/lists/${list.id}`;
+    const link = `http://localhost:5000/lists/${list.id}`;
     setShareableLink(link);
     setShowSharePopup(true);
   };
@@ -131,7 +153,7 @@ const MainComponent = ({ selectedCategory }) => {
     setShowAddPopup(false);
     setShowEditPopup(false);
     setShowSharePopup(false);
-    setShowNotification(false); // Close notification
+    setShowNotification(false);
   };
 
   return (
@@ -214,23 +236,29 @@ const MainComponent = ({ selectedCategory }) => {
             value={listName}
             onChange={(e) => setListName(e.target.value)}
           />
-          {listItems.map((item, index) => (
-            <TextField
-              key={index}
-              margin="dense"
-              label={`Item ${index + 1}`}
-              type="text"
-              fullWidth
-              value={item}
-              onChange={(e) => {
-                const newItems = [...listItems];
-                newItems[index] = e.target.value;
-                setListItems(newItems);
-              }}
-              style={{ marginBottom: 8 }}
-            />
-          ))}
-          <Button onClick={() => setListItems([...listItems, ''])}>Add Item</Button>
+          <Select
+            margin="dense"
+            fullWidth
+            value={selectedCategory}
+            onChange={(e) => setSelectedCategory(e.target.value)}
+            displayEmpty
+            inputProps={{ 'aria-label': 'Select Category' }}
+          >
+            <MenuItem value="" disabled>Select Category</MenuItem>
+            {categories.map((category, index) => (
+              <MenuItem key={index} value={category}>
+                {category}
+              </MenuItem>
+            ))}
+          </Select>
+          <TextField
+            margin="dense"
+            label="Items (comma separated)"
+            type="text"
+            fullWidth
+            value={listItems.join(', ')}
+            onChange={(e) => setListItems(e.target.value.split(',').map(item => item.trim()))}
+          />
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClosePopup} color="primary">Cancel</Button>
@@ -251,23 +279,29 @@ const MainComponent = ({ selectedCategory }) => {
             value={listName}
             onChange={(e) => setListName(e.target.value)}
           />
-          {listItems.map((item, index) => (
-            <TextField
-              key={index}
-              margin="dense"
-              label={`Item ${index + 1}`}
-              type="text"
-              fullWidth
-              value={item}
-              onChange={(e) => {
-                const newItems = [...listItems];
-                newItems[index] = e.target.value;
-                setListItems(newItems);
-              }}
-              style={{ marginBottom: 8 }}
-            />
-          ))}
-          <Button onClick={() => setListItems([...listItems, ''])}>Add Item</Button>
+          <Select
+            margin="dense"
+            fullWidth
+            value={selectedCategory}
+            onChange={(e) => setSelectedCategory(e.target.value)}
+            displayEmpty
+            inputProps={{ 'aria-label': 'Select Category' }}
+          >
+            <MenuItem value="" disabled>Select Category</MenuItem>
+            {categories.map((category, index) => (
+              <MenuItem key={index} value={category}>
+                {category}
+              </MenuItem>
+            ))}
+          </Select>
+          <TextField
+            margin="dense"
+            label="Items (comma separated)"
+            type="text"
+            fullWidth
+            value={listItems.join(', ')}
+            onChange={(e) => setListItems(e.target.value.split(',').map(item => item.trim()))}
+          />
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClosePopup} color="primary">Cancel</Button>
@@ -279,17 +313,18 @@ const MainComponent = ({ selectedCategory }) => {
       <Dialog open={showSharePopup} onClose={handleClosePopup}>
         <DialogTitle>Share List</DialogTitle>
         <DialogContent>
-          <Typography variant="body1">Shareable link:</Typography>
+          <Typography variant="body1">Shareable Link:</Typography>
           <TextField
-            value={shareableLink}
+            margin="dense"
             fullWidth
+            value={shareableLink}
             InputProps={{
               readOnly: true,
             }}
           />
-          <Button onClick={handleCopyLink} color="primary">Copy Link</Button>
         </DialogContent>
         <DialogActions>
+          <Button onClick={handleCopyLink} color="primary">Copy Link</Button>
           <Button onClick={handleClosePopup} color="primary">Close</Button>
         </DialogActions>
       </Dialog>

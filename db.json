@@ -36,109 +36,109 @@
   ],
   "categories": [
     {
-      "id": 1,
+      "id": "1",
       "name": "Groceries",
       "icon": "🛒"
     },
     {
-      "id": 2,
+      "id": "2",
       "name": "Office Supplies",
       "icon": "📎"
     },
     {
-      "id": 3,
+      "id": "3",
       "name": "Cleaning Products",
       "icon": "🧹"
     },
     {
-      "id": 4,
+      "id": "4",
       "name": "Electronics",
       "icon": "💻"
     },
     {
-      "id": 5,
+      "id": "5",
       "name": "Books",
       "icon": "📚"
     },
     {
-      "id": 6,
+      "id": "6",
       "name": "Gardening Supplies",
       "icon": "🌱"
     },
     {
-      "id": 7,
+      "id": "7",
       "name": "Pet Supplies",
       "icon": "🐾"
     },
     {
-      "id": 8,
+      "id": "8",
       "name": "Health & Wellness",
       "icon": "💊"
     },
     {
-      "id": 9,
+      "id": "9",
       "name": "Fitness",
       "icon": "🏋️‍♂️"
     },
     {
-      "id": 10,
+      "id": "10",
       "name": "Kitchen Gadgets",
       "icon": "🍴"
     },
     {
-      "id": 11,
+      "id": "11",
       "name": "Toys",
       "icon": "🧸"
     },
     {
-      "id": 12,
+      "id": "12",
       "name": "Office Furniture",
       "icon": "🪑"
     },
     {
-      "id": 13,
+      "id": "13",
       "name": "Travel Essentials",
       "icon": "🧳"
     },
     {
-      "id": 14,
+      "id": "14",
       "name": "Arts & Crafts",
       "icon": "🎨"
     },
     {
-      "id": 15,
+      "id": "15",
       "name": "Seasonal Decor",
       "icon": "🎄"
     },
     {
-      "id": 16,
+      "id": "16",
       "name": "Personal Care",
       "icon": "🧼"
     },
     {
-      "id": 17,
+      "id": "17",
       "name": "DIY Tools",
       "icon": "🔧"
     },
     {
-      "id": 18,
+      "id": "18",
       "name": "Party Supplies",
       "icon": "🎉"
     },
     {
-      "id": 19,
+      "id": "19",
       "name": "Camping Gear",
       "icon": "⛺"
     },
     {
-      "id": 20,
+      "id": "20",
       "name": "Sports Equipment",
       "icon": "⚽"
     }
   ],
   "lists": [
     {
-      "id": 1,
+      "id": "1",
       "userId": "1",
       "name": "Groceries",
       "items": [
@@ -162,10 +162,11 @@
         "Garlic",
         "Potatoes",
         "Peppers"
-      ]
+      ],
+      "category": ""
     },
     {
-      "id": 2,
+      "id": "2",
       "userId": "1",
       "name": "Office Supplies",
       "items": [
@@ -189,10 +190,11 @@
         "Post-It Notes",
         "Index Cards",
         "Push Pins"
-      ]
+      ],
+      "category": ""
     },
     {
-      "id": 3,
+      "id": "3",
       "userId": "1",
       "name": "Cleaning Products",
       "items": [
@@ -219,7 +221,7 @@
       ]
     },
     {
-      "id": 4,
+      "id": "4",
       "userId": "1",
       "name": "Electronics",
       "items": [
@@ -246,7 +248,7 @@
       ]
     },
     {
-      "id": 5,
+      "id": "5",
       "userId": "1",
       "name": "Books",
       "items": [
@@ -272,7 +274,7 @@
       ]
     },
     {
-      "id": 6,
+      "id": "6",
       "userId": "1",
       "name": "Gardening Supplies",
       "items": [
@@ -299,7 +301,7 @@
       ]
     },
     {
-      "id": 7,
+      "id": "7",
       "userId": "1",
       "name": "Pet Supplies",
       "items": [
@@ -326,7 +328,7 @@
       ]
     },
     {
-      "id": 8,
+      "id": "8",
       "userId": "1",
       "name": "Health & Wellness",
       "items": [
@@ -353,7 +355,7 @@
       ]
     },
     {
-      "id": 9,
+      "id": "9",
       "userId": "1",
       "name": "Fitness",
       "items": [
@@ -380,29 +382,7 @@
       ]
     },
     {
-      "id": 10,
-      "userId": "1",
-      "name": "Kitchen Gadgets",
-      "items": [
-        "Blender",
-        "Toaster",
-        "Microwave",
-        "Coffee Maker",
-        "Food Processor",
-        "Electric Kettle",
-        "Slow Cooker",
-        "Griddle",
-        "Immersion Blender",
-        "Dish Rack",
-        "Oven Thermometer",
-        "Mandoline Slicer",
-        "Coffee Grinder",
-        "Waffle Maker",
-        "Spice Grinder"
-      ]
-    },
-    {
-      "id": 11,
+      "id": "11",
       "userId": "1",
       "name": "Toys",
       "items": [
@@ -429,7 +409,7 @@
       ]
     },
     {
-      "id": 12,
+      "id": "12",
       "userId": "1",
       "name": "Office Furniture",
       "items": [
@@ -456,7 +436,7 @@
       ]
     },
     {
-      "id": 13,
+      "id": "13",
       "userId": "1",
       "name": "Travel Essentials",
       "items": [
@@ -483,7 +463,7 @@
       ]
     },
     {
-      "id": 14,
+      "id": "14",
       "userId": "1",
       "name": "Arts & Crafts",
       "items": [
@@ -510,7 +490,7 @@
       ]
     },
     {
-      "id": 15,
+      "id": "15",
       "userId": "1",
       "name": "Seasonal Decor",
       "items": [
@@ -537,7 +517,7 @@
       ]
     },
     {
-      "id": 16,
+      "id": "16",
       "userId": "1",
       "name": "Personal Care",
       "items": [
@@ -564,7 +544,7 @@
       ]
     },
     {
-      "id": 17,
+      "id": "17",
       "userId": "1",
       "name": "DIY Tools",
       "items": [
@@ -591,7 +571,7 @@
       ]
     },
     {
-      "id": 18,
+      "id": "18",
       "userId": "1",
       "name": "Party Supplies",
       "items": [
@@ -618,7 +598,7 @@
       ]
     },
     {
-      "id": 19,
+      "id": "19",
       "userId": "1",
       "name": "Camping Gear",
       "items": [
@@ -645,7 +625,7 @@
       ]
     },
     {
-      "id": 20,
+      "id": "20",
       "userId": "1",
       "name": "Sports Equipment",
       "items": [
