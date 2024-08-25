@@ -91,6 +91,17 @@
 .searchContainer .searchIcon{
     border: 4px solid;
 }
+.floatingBtn{
+    position: absolute;
+    bottom: 0;
+    right: 0;
+}
+.crudBtns{
+    display: flex;
+    padding: 10px 0;
+    gap: 10px;
+    justify-content: end;
+}
 @media (max-width: 941px) {
     .unorderedList{
         overflow-y: auto;

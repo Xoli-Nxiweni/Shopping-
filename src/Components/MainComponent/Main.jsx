@@ -6,19 +6,28 @@ import SellOutlinedIcon from '@mui/icons-material/SellOutlined';
 import Loader from '../Loader/Loader';
 import SearchAppBar from '../SearchBar/SearchBar';
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle, TextField, Typography } from '@mui/material';
+import ShareOutlinedIcon from '@mui/icons-material/ShareOutlined';
+import DeleteIcon from '@mui/icons-material/Delete';
+import EditNoteIcon from '@mui/icons-material/EditNote';
 import './Main.css';
 
+// eslint-disable-next-line react/prop-types
 const MainComponent = ({ selectedCategory }) => {
   const dispatch = useDispatch();
   const { lists = [], status, error } = useSelector((state) => state.lists);
   const isLoading = useSelector((state) => state.loading.isLoading);
   const [showAddPopup, setShowAddPopup] = useState(false);
   const [showEditPopup, setShowEditPopup] = useState(false);
+  const [showSharePopup, setShowSharePopup] = useState(false);
+  const [showNotification, setShowNotification] = useState(false);
+  const [notificationMessage, setNotificationMessage] = useState('');
   const [searchTerm, setSearchTerm] = useState('');
   const [filteredListsState, setFilteredListsState] = useState([]);
   const [editingList, setEditingList] = useState(null);
   const [listName, setListName] = useState('');
   const [listItems, setListItems] = useState([]);
+  const [setSelectedListToShare] = useState(null);
+  const [shareableLink, setShareableLink] = useState('');
 
   useEffect(() => {
     if (status === 'idle') {
@@ -31,8 +40,10 @@ const MainComponent = ({ selectedCategory }) => {
 
     if (selectedCategory) {
       filtered = filtered.filter(list =>
+        // eslint-disable-next-line react/prop-types
         list.name?.toLowerCase().includes(selectedCategory.toLowerCase()) ||
         list.items?.some(item =>
+          // eslint-disable-next-line react/prop-types
           item.toLowerCase().includes(selectedCategory.toLowerCase())
         )
       );
@@ -50,62 +61,77 @@ const MainComponent = ({ selectedCategory }) => {
     setFilteredListsState(filtered);
   }, [searchTerm, lists, selectedCategory]);
 
-  useEffect(() => {
-    // Load lists from localStorage if not available in state
-    const storedLists = JSON.parse(localStorage.getItem('lists')) || [];
-    if (lists.length === 0) {
-      dispatch(fetchLists()).catch(() => {
-        // If fetch fails, fall back to localStorage data
-        dispatch({ type: 'lists/fetchLists/fulfilled', payload: storedLists });
-      });
-    }
-  }, [lists, dispatch]);
-
-  const handleAddList = () => {
-    console.log('clicked');
-    setEditingList(null);
-    setListName('');
-    setListItems([]);
-    setShowAddPopup(true);
-    setShowAddPopup(true);
-    
-  };
-
-  const handleEditList = (list) => {
-    setEditingList(list);
-    setListName(list.name || '');
-    setListItems(list.items || []);
-    setShowEditPopup(true);
-  };
-
-  const handleClosePopup = () => {
-    setShowAddPopup(false);
-    setShowEditPopup(false);
-  };
-
   const handleAddListSubmit = async () => {
     const newList = { name: listName, items: listItems };
     try {
       if (editingList) {
         await dispatch(updateList({ ...editingList, name: listName, items: listItems }));
+        setNotificationMessage('List updated successfully!');
       } else {
         await dispatch(createList(newList));
+        setNotificationMessage('List added successfully!');
       }
-      // Update localStorage
-      localStorage.setItem('lists', JSON.stringify([...lists, newList]));
+      dispatch(fetchLists());
       handleClosePopup();
     } catch (error) {
-      console.error('Error:', error.message);
+      setNotificationMessage('Error occurred: ' + error.message);
     }
+    setShowNotification(true);
+    // Set timer to close notification and redirect
+    setTimeout(() => {
+      setShowNotification(false);
+      window.location.href = '/'; // Redirect to landing page
+    }, 2000);
   };
 
-  const handleDeleteList = (id) => {
-    dispatch(deleteList(id))
-      .then(() => {
-        // Update localStorage after successful delete
-        const updatedLists = lists.filter(list => list.id !== id);
-        localStorage.setItem('lists', JSON.stringify(updatedLists));
-      });
+  const handleDeleteList = async (id) => {
+    try {
+      await dispatch(deleteList(id));
+      setNotificationMessage('List deleted successfully!');
+      dispatch(fetchLists());
+    } catch (error) {
+      setNotificationMessage('Error occurred: ' + error.message);
+    }
+    setShowNotification(true);
+    // Set timer to close notification and redirect
+    setTimeout(() => {
+      setShowNotification(false);
+      window.location.href = '/'; // Redirect to landing page
+    }, 2000);
+  };
+
+  const handleAddList = () => {
+    setEditingList(null);
+    setListName('');
+    setListItems([]);
+    setShowAddPopup(true);
+  };
+
+  const handleEditList = (list) => {
+    setEditingList(list);
+    setListName(list.name);
+    setListItems(list.items);
+    setShowEditPopup(true);
+  };
+
+  const handleShareList = (list) => {
+    setSelectedListToShare(list);
+    const link = `https://myapp.com/lists/${list.id}`;
+    setShareableLink(link);
+    setShowSharePopup(true);
+  };
+
+  const handleCopyLink = () => {
+    navigator.clipboard.writeText(shareableLink)
+      .then(() => alert('Link copied to clipboard!'))
+      .catch(err => console.error('Failed to copy link:', err));
+  };
+
+  const handleClosePopup = () => {
+    setShowAddPopup(false);
+    setShowEditPopup(false);
+    setShowSharePopup(false);
+    setShowNotification(false); // Close notification
   };
 
   return (
@@ -113,7 +139,7 @@ const MainComponent = ({ selectedCategory }) => {
       {isLoading && <Loader />}
 
       <div className="left">
-        <AddButton label="Add New List" onClick={handleAddList} />
+        <AddButton label="Add New List" onAdd={handleAddList} className='floatingBtn' />
         <div className="searchContainer">
           <SearchAppBar onSearchChange={setSearchTerm} />
         </div>
@@ -138,8 +164,21 @@ const MainComponent = ({ selectedCategory }) => {
                       <li>No items available</li>
                     )}
                   </ul>
-                  <Button variant="contained" color="primary" onClick={() => handleEditList(list)} style={{ margin: '10px' }}>Edit</Button>
-                  <Button variant="contained" color="warning" onClick={() => handleDeleteList(list.id)} style={{ margin: '10px' }}>Delete</Button>
+                  <div className="crudBtns">
+                    <Button variant="contained" onClick={() => handleEditList(list)} style={{ background: '#000'}}><EditNoteIcon/></Button>
+                    <Button variant="contained" onClick={() => handleShareList(list)} style={{ background: '#000' }}><ShareOutlinedIcon/></Button>
+                    <Button
+                      variant="contained"
+                      onClick={() => {
+                        if (window.confirm('Are you sure you want to delete this list?')) {
+                          handleDeleteList(list.id);
+                        }
+                      }}
+                      style={{ background: '#000' }}
+                    >
+                      <DeleteIcon />
+                    </Button>
+                  </div>
                 </div>
               ))}
             </ul>
@@ -148,6 +187,19 @@ const MainComponent = ({ selectedCategory }) => {
           )}
         </div>
       </div>
+
+      {/* Notification Popup */}
+      {showNotification && (
+        <Dialog open={showNotification} onClose={() => setShowNotification(false)}>
+          <DialogTitle>Notification</DialogTitle>
+          <DialogContent>
+            <Typography variant="body1">{notificationMessage}</Typography>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={() => setShowNotification(false)} color="primary">Close</Button>
+          </DialogActions>
+        </Dialog>
+      )}
 
       {/* Add List Popup */}
       <Dialog open={showAddPopup} onClose={handleClosePopup}>
@@ -182,7 +234,7 @@ const MainComponent = ({ selectedCategory }) => {
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClosePopup} color="primary">Cancel</Button>
-          <Button onClick={handleAddListSubmit} color="primary">Submit</Button>
+          <Button onClick={handleAddListSubmit} color="primary">Save</Button>
         </DialogActions>
       </Dialog>
 
@@ -219,7 +271,26 @@ const MainComponent = ({ selectedCategory }) => {
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClosePopup} color="primary">Cancel</Button>
-          <Button onClick={handleAddListSubmit} color="primary">Submit</Button>
+          <Button onClick={handleAddListSubmit} color="primary">Save</Button>
+        </DialogActions>
+      </Dialog>
+
+      {/* Share List Popup */}
+      <Dialog open={showSharePopup} onClose={handleClosePopup}>
+        <DialogTitle>Share List</DialogTitle>
+        <DialogContent>
+          <Typography variant="body1">Shareable link:</Typography>
+          <TextField
+            value={shareableLink}
+            fullWidth
+            InputProps={{
+              readOnly: true,
+            }}
+          />
+          <Button onClick={handleCopyLink} color="primary">Copy Link</Button>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClosePopup} color="primary">Close</Button>
         </DialogActions>
       </Dialog>
     </div>

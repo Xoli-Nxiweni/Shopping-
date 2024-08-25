@@ -1,14 +1,27 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
+import { login } from '../../slices/authSlice';
 import './Auth.css';
 
 // eslint-disable-next-line react/prop-types
 function Auth({ onLogin }) {
+  const dispatch = useDispatch();
   const [isRegistering, setIsRegistering] = useState(false);
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const [repeatPassword, setRepeatPassword] = useState(''); // State for repeat password
+  const [repeatPassword, setRepeatPassword] = useState('');
   const [error, setError] = useState('');
+  const authStatus = useSelector(state => state.auth.status);
+
+  useEffect(() => {
+    // Load user data from localStorage if available
+    const user = JSON.parse(localStorage.getItem('user'));
+    if (user) {
+      dispatch(login(user));  // Set user state in Redux
+      onLogin(user);  // Optionally pass user to parent
+    }
+  }, [dispatch, onLogin]);
 
   const handleLogin = async () => {
     try {
@@ -21,7 +34,8 @@ function Auth({ onLogin }) {
 
       if (user) {
         localStorage.setItem('user', JSON.stringify(user)); // Persist user in localStorage
-        onLogin(user);  // Pass the user object to the onLogin function
+        dispatch(login(user));  // Use Redux action to set user state
+        onLogin(user);  // Optionally pass user to parent
       } else {
         setError('Invalid username or password');
       }
@@ -47,11 +61,17 @@ function Auth({ onLogin }) {
         return;
       }
 
-      const newUser = { username, password, lists: [] };
+      const newUser = { 
+        username, 
+        password, 
+        lists: [] 
+      };
+
       await axios.post('http://localhost:5000/users', newUser);
 
       localStorage.setItem('user', JSON.stringify(newUser)); // Persist newUser in localStorage
-      onLogin(newUser);  // Pass the newUser object to the onLogin function
+      dispatch(login(newUser));  // Use Redux action to set user state
+      onLogin(newUser);  // Optionally pass user to parent
     } catch (error) {
       setError('An error occurred while registering.', error);
     }
@@ -91,16 +111,16 @@ function Auth({ onLogin }) {
           className="auth-field"
         />
       )}
-      <button onClick={handleSubmit}>
+      <button onClick={handleSubmit} disabled={authStatus === 'loading'}>
         {isRegistering ? 'SIGN UP' : 'SIGN IN'}
       </button>
       {error && <p className="auth-error">{error}</p>}
       <p className="toggle-auth">
         {isRegistering ? 'Already have an account?' : "Don't have an account?"}{' '}
         <span className='authLinks'>
-        <button onClick={() => setIsRegistering(!isRegistering)}>
-          {isRegistering ? 'SIGN IN' : 'SIGN UP'}
-        </button>
+          <button onClick={() => setIsRegistering(!isRegistering)}>
+            {isRegistering ? 'SIGN IN' : 'SIGN UP'}
+          </button>
         </span>
       </p>
     </div>
@@ -108,4 +128,3 @@ function Auth({ onLogin }) {
 }
 
 export default Auth;
-
